@@ -4,14 +4,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
 <script src="./spec.js"></script>
 <pre class="metadata">
-title: Proposal Title Goes Here
-stage: -1
-contributors: Your Name Goes Here
+title: Map.prototype.upsert
+stage: 1
+contributors: Erica Pramer
 </pre>
 
-<emu-clause id="sec-demo-clause">
-  <h1>This is an emu-clause</h1>
-  <p>This is an algorithm:</p>
+<emu-clause id="sec-map.prototype.upsert">
+  <h1>Map.prototype.upsert(key, (old) => updated, value)`</h1>
+  <p>The `upsert` method does stuff and returns stuff.</p>
   <emu-alg>
     1. Let _proposal_ be *undefined*.
     1. If IsAccepted(_proposal_),

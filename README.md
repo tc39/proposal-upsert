@@ -1,34 +1,92 @@
-# template-for-proposals
+# `Map.prototype.upsert`
 
-A repository template for ECMAScript proposals.
+ECMAScript proposal and reference implementation for `Map.prototype.upsert`.
 
-## Before creating a proposal
+**Author:** Brad Farias (GoDaddy)
 
-Please ensure the following:
-  1. You have read the [process document](https://tc39.github.io/process-document/)
-  1. You have reviewed the [existing proposals](https://github.com/tc39/proposals/)
-  1. You are aware that your proposal requires being a member of TC39, or locating a TC39 member to "champion" your proposal
+**Champion:** Erica Pramer (GoDaddy)
 
-## Create your proposal repo
+**Stage:** 1
 
-Follow these steps:
-  1.  Create your own repo, clone this one, and copy its contents into your repo. (Note: Do not fork this repo in GitHub's web interface, as that will later prevent transfer into the TC39 organization)
-  1.  Go to your repo settings “Options” page, under “GitHub Pages”, and set the source to the **master branch** and click Save.
-      1. Ensure "Issues" is checked.
-      1. Also, you probably want to disable "Wiki" and "Projects"
-  1.  Avoid merge conflicts with build process output files by running:
-      ```sh
-      git config --local --add merge.output.driver true
-      git config --local --add merge.output.driver true
-      ```
-  1.  Add a post-rewrite git hook to auto-rebuild the output on every commit:
-      ```sh
-      cp hooks/post-rewrite .git/hooks/post-rewrite
-      chmod +x .git/hooks/post-rewrite
-      ```
+## Motivation
 
-## Maintain your proposal repo
+Adding and updating values of a Map are tasks that developers often perform 
+in conjuction. There are currently no `Map` prototype methods for either of those two
+things, let alone a method that does both. The workarounds involve multiple 
+lookups and developer inconvenience.
 
-  1. Make your changes to `spec.emu` (ecmarkup uses HTML syntax, but is not HTML, so I strongly suggest not naming it ".html")
-  1. Any commit that makes meaningful changes to the spec, should run `npm run build` and commit the resulting output.
-  1. Whenever you update `ecmarkup`, run `npm run build` and commit any changes that come from that dependency.
+## Solution: `upsert`
+
+We propose the addition of a method that will add a value to a map if the map does not already have something at `key`, and will also update an existing 
+value at `key`. 
+It’s worthwhile having this API for the average case to cut down on lookups.
+It is also worthwhile for developer convenience.
+
+## Examples
+
+### Normalization of values during insertion
+Currently you would need to do 3 lookups.
+```js
+if (!map.has(key)) {
+  map.set(key, defaultValue);
+}
+map.get(key).doThing();
+```
+
+### Either update or insert for a specific key??? TODO
+Currently you would need to do 2 lookups.
+
+```js
+if (!map.has(key)) {
+  map.set(key, defaultValue);
+} else {
+  map.get(key).doThing();
+}
+```
+
+The proposed API allows a developer to...
+
+```js
+upsert(key, (old) => updated, initialVal)
+```
+
+### Just insert if missing
+
+### Just update if present
+
+## Implementations in other languages
+
+Similar functionality exists in other languages. (TODO: is there anything
+that performs both update and insert where the update is also applied to
+inserted values?)
+
+**Java**
+
+* [`computeIfPresent`](https://docs.oracle.com/javase/9/docs/api/java/util/Map.html#computeIfPresent-K-java.util.function.BiFunction-) remaps existing entry
+
+
+**C++**
+
+* [`emplace`](https://en.cppreference.com/w/cpp/container/map/emplace) inserts if missing
+* [`map[] assignment opts`](https://en.cppreference.com/w/cpp/container/map/operator_at) inserts if missing
+at `key` but also returns a value if it exists at `key`
+* [`insert_or_assign`](https://en.cppreference.com/w/cpp/container/map/insert_or_assign) inserts if missing. updates existing value by replacing with a 
+specific new one, not by applying a function to the existing value
+
+
+**Rust**
+
+* [`and_modify`](https://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html#method.and_modify) Provides in-place mutable access to an occupied entry
+
+
+**Python**
+
+
+
+## FAQ
+
+
+## Specification
+
+* [Ecmarkup source](https://github.com/tc39/proposal-promise-allSettled/blob/master/spec.html)
+* [HTML version](https://tc39.es/proposal-promise-allSettled/)

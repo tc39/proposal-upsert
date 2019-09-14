@@ -1,7 +1,7 @@
 {
   "private": true,
-  "name": "template-for-proposals",
-  "description": "A repository template for ECMAScript proposals.",
+  "name": "proposal-upsert",
+  "description": "ECMAScript Proposal, specs, and reference implementation for Map.prototype.upsert",
   "scripts": {
     "build": "ecmarkup spec.emu index.html"
   },
