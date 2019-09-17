@@ -33,7 +33,15 @@ if (!map.has(key)) {
 map.get(key).doThing();
 ```
 
-### Either update or insert for a specific key??? TODO
+The proposed API allows a developer to do one lookup and update in place
+```js
+upsert(key, (old) => updated, () => insertionValue)
+```
+
+
+The following examples would also be optimized and made simpler by `upsert`:
+
+### Either update or insert for a specific key
 Currently you would need to do 2 lookups.
 
 ```js
@@ -44,15 +52,17 @@ if (!map.has(key)) {
 }
 ```
 
-The proposed API allows a developer to...
-
-```js
-upsert(key, (old) => updated, initialVal)
-```
-
 ### Just insert if missing
+// you would want to omit an update if
+if (!map.has(key)) {
+  map.set(key, defaultValue);
+}
 
 ### Just update if present
+// you would want to omit an insert if
+old = map.get(key);
+updated = old.doThing();
+map.set(key, updated);
 
 ## Implementations in other languages
 
@@ -84,9 +94,19 @@ specific new one, not by applying a function to the existing value
 
 
 ## FAQ
-
+- Is the goal to simplify the API or to optimize it?
+  - both
+- Why not use existing jsengines that optimize by coalescing the lookup and mutation? 
+  - this does not cover all patterns
+- Why use functions instead of values for the parameters?
+  - you may want to apply a normalization function when inserting
+  - when updating, we will be able to perform a function on the existing value
+  instead of just replacing the value
+- Why are we calling this upsert?
+  - it is a combination of `update` & `insert`
+  - `updateOrInsert` seems too wordy
 
 ## Specification
 
-* [Ecmarkup source](https://github.com/tc39/proposal-promise-allSettled/blob/master/spec.html)
-* [HTML version](https://tc39.es/proposal-promise-allSettled/)
+* [Ecmarkup source](https://github.com/thumbsupep/proposal-upsert/blob/master/spec.emu)
+* [HTML version](https://thumbsupep.github.io/proposal-upsert/)
