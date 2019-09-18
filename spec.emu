@@ -13,14 +13,20 @@ contributors: Erica Pramer
   <h1>Map.prototype.upsert(key, updateFn, insertFn)`</h1>
   <p>The `upsert` method does stuff and returns stuff. When the upsert method is called with one, two, or three arguments the following steps are taken:</p>
   <emu-alg>
-    1. validate types (key must be string, others are fn or undefined)
-    2. Iterate through entries until you get to the key
-    3. When the key is found, If IsCallable(updateFn) is true,
-      1. call the function with old value as param (what happens if no return value?)
-      2. Map.set(key, updated);
-    4. If you reach the end and there is no match for the key, If IsCallable(insertFn) is true,
+    1. Let M be the this value.
+    2. validate types (key must be string, others are fn or undefined, but both cant be undefined)
+    3. Let entries be the List that is M.
+    4. For each Record { [[Key]], [[Value]] } e that is an element of entries, in original key insertion order, do
+      1. check if key matches
+      2. If IsCallable(updateFn) is true,
+        1. call the function with old value as param (what happens if no return value?)
+        2. Map.set(key, updated);
+      3. Else return map? return undefined?
+    5. If you reach the end and there is no match for the key, If IsCallable(insertFn) is true,
       1. evaluate insertFn (what happens if no return value?)
       2. Map.set(key, evaluated)
-    5. Return the map? return nothing?
+      3. If IsCallable(updateFn) is true,
+        1. call the update function after inserting
+    6. Return the map? return nothing?
   </emu-alg>
 </emu-clause>
