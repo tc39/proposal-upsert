@@ -10,14 +10,17 @@ contributors: Erica Pramer
 </pre>
 
 <emu-clause id="sec-map.prototype.upsert">
-  <h1>Map.prototype.upsert(key, (old) => updated, value)`</h1>
-  <p>The `upsert` method does stuff and returns stuff.</p>
+  <h1>Map.prototype.upsert(key, updateFn, insertFn)`</h1>
+  <p>The `upsert` method does stuff and returns stuff. When the upsert method is called with one, two, or three arguments the following steps are taken:</p>
   <emu-alg>
-    1. Let _proposal_ be *undefined*.
-    1. If IsAccepted(_proposal_),
-      1. Let _stage_ be *0*.
-    1. Else,
-      1. Let _stage_ be *-1*.
-    1. Return ? ToString(_proposal_).
+    1. validate types (key must be string, others are fn or undefined)
+    2. Iterate through entries until you get to the key
+    3. When the key is found, If IsCallable(updateFn) is true,
+      1. call the function with old value as param (what happens if no return value?)
+      2. Map.set(key, updated);
+    4. If you reach the end and there is no match for the key, If IsCallable(insertFn) is true,
+      1. evaluate insertFn (what happens if no return value?)
+      2. Map.set(key, evaluated)
+    5. Return the map? return nothing?
   </emu-alg>
 </emu-clause>
