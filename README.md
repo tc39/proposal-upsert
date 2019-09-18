@@ -22,7 +22,7 @@ value at `key`.
 It’s worthwhile having this API for the average case to cut down on lookups.
 It is also worthwhile for developer convenience.
 
-## Examples
+## Examples & Proposed API
 
 The following examples would all be optimized and made simpler by `upsert`.
 The proposed API allows a developer to do one lookup and update in place

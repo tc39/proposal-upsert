@@ -11,7 +11,7 @@ contributors: Erica Pramer
 
 <emu-clause id="sec-map.prototype.upsert">
   <h1>Map.prototype.upsert(key, updateFn, insertFn)`</h1>
-  <p>The `upsert` method does stuff and returns stuff. When the upsert method is called with one, two, or three arguments the following steps are taken:</p>
+  <p>The `upsert` method does stuff and returns stuff. When the upsert method is called the following steps are taken:</p>
   <emu-alg>
     1. Let _M_ be the *this* value.
     2. validate types (key must be string, others are fn or undefined, but both cant be undefined)
@@ -20,16 +20,15 @@ contributors: Erica Pramer
       1. If e.[[Key]] is not empty and SameValueZero(e.[[Key]], _key_) is *true* then
         1. If IsCallable(updateFn) is *true* then
           1. Perform updateFn with old value as param (what happens if no return value?)
-          2. Set e.[[Value]] to updated value.
+          2. Set _e_.[[Value]] to updated value.
         2. Else return map? return undefined?
     5. If you get the end and If IsCallable(insertFn) is *true*, then
       1. Perform insertFn (what happens if no return value?)
-      2. set key to value from above.
-      3. Let p be the Record { [[Key]]: key, [[Value]]: value }.
-      4. Append p as the last element of entries.
-      3. If IsCallable(updateFn) is true,
+      2. Let _p_ be the Record { [[Key]]: _key_, [[Value]]: value from above }.
+      3. Append _p_ as the last element of _entries_.
+      4. If IsCallable(updateFn) is *true*,
         1. call the update function after inserting
-        2. Set p.[[Value]] to updated value
+        2. Set _p_.[[Value]] to updated value
     6. Return the map? return nothing?
   </emu-alg>
 </emu-clause>
