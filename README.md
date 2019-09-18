@@ -24,31 +24,32 @@ It is also worthwhile for developer convenience.
 
 ## Examples
 
+The following examples would all be optimized and made simpler by `upsert`.
+The proposed API allows a developer to do one lookup and update in place
+```js
+upsert(key, old => updated, () => insertionValue)
+```
+
 ### Normalization of values during insertion
 Currently you would need to do 3 lookups.
 ```js
 if (!map.has(key)) {
-  map.set(key, defaultValue);
+  map.set(key, value);
 }
 map.get(key).doThing();
 ```
 
-The proposed API allows a developer to do one lookup and update in place
-```js
-upsert(key, (old) => updated, () => insertionValue)
-```
-
-
-The following examples would also be optimized and made simpler by `upsert`:
-
 ### Either update or insert for a specific key
-Currently you would need to do 2 lookups.
+You might get new data and want to calculate some aggregate if the key exists,
+but just insert if it's the first value at that key.
 
 ```js
-if (!map.has(key)) {
-  map.set(key, defaultValue);
+// two lookups
+old = map.get(key);
+if (!old) {
+  map.set(key, value);
 } else {
-  map.get(key).doThing();
+  map.set(key, old => updated);
 }
 ```
 
@@ -56,8 +57,9 @@ if (!map.has(key)) {
 You might omit an update if you're handling data that doesn't change, but
 can still be appended.
 ```js
+// two lookups
 if (!map1.has(key)) {
-  map1.set(key, valueFromMap2);
+  map1.set(key, value);
 }
 ```
 
@@ -66,6 +68,7 @@ You might want to omit an insert if you want to perform a function on
 all existing values in a Map (ex. normalization).
 
 ```js
+// two lookups
 old = map.get(key);
 updated = old.doThing();
 map.set(key, updated);
