@@ -53,16 +53,23 @@ if (!map.has(key)) {
 ```
 
 ### Just insert if missing
-// you would want to omit an update if
-if (!map.has(key)) {
-  map.set(key, defaultValue);
+You might omit an update if you're handling data that doesn't change, but
+can still be appended.
+```js
+if (!map1.has(key)) {
+  map1.set(key, valueFromMap2);
 }
+```
 
 ### Just update if present
-// you would want to omit an insert if
+You might want to omit an insert if you want to perform a function on
+all existing values in a Map (ex. normalization).
+
+```js
 old = map.get(key);
 updated = old.doThing();
 map.set(key, updated);
+```
 
 ## Implementations in other languages
 
