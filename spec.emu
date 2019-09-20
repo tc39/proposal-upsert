@@ -22,13 +22,10 @@ contributors: Erica Pramer
           1. Perform updateFn with old value as param (what happens if no return value?)
           2. Set _e_.[[Value]] to updated value.
         2. Else return map? return undefined?
-    5. If you get the end and If IsCallable(insertFn) is *true*, then
+    5. If you get to the end and If IsCallable(insertFn) is *true*, then
       1. Perform insertFn (what happens if no return value?)
       2. Let _p_ be the Record { [[Key]]: _key_, [[Value]]: value from above }.
       3. Append _p_ as the last element of _entries_.
-      4. If IsCallable(updateFn) is *true*,
-        1. call the update function after inserting
-        2. Set _p_.[[Value]] to updated value
     6. Return the map? return nothing?
   </emu-alg>
 </emu-clause>
