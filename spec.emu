@@ -20,23 +20,21 @@ contributors: Erica Pramer
   <p>When the upsert method is called the following steps are taken:</p>
   <emu-alg>
     1. Let _M_ be the *this* value.
-    2. If IsCallable(updateFn) is *false*, and IsCallable(insertFn) is *false*, throw a *TypeError* exception.
-    3. If Type(key) is not String, throw a *TypeError* exception. (is this needed?)
-    4. Let _entries_ be the List that is _M_.
-    5. For each Record { [[Key]], [[Value]] } _e_ that is an element of _entries_, in original key insertion order, do
+    2. Perform ? RequireInternalSlot(M, [[MapData]]).
+    3. Let entries be the List that is M.[[MapData]].
+    4. If IsCallable(updateFn) is *false*, and IsCallable(insertFn) is *false*, throw a *TypeError* exception.
+    5. Let _entries_ be the List that is _M_.
+    6. For each Record { [[Key]], [[Value]] } _e_ that is an element of _entries_, in original key insertion order, do
       1. If e.[[Key]] is not empty and SameValueZero(e.[[Key]], _key_) is *true* then
         1. If IsCallable(updateFn) is *true* then
           1. Let _updated_ be Call(updateFn, undefined, « e.[[Value]] ») 
-          (what happens if Fn does not provide a return val? is undefined correct for
-          the this value of call?)
           2. Set _e_.[[Value]] to _updated_.
+          3. Return _e_.[[Value]]
         2. Return _e_.[[Value]]
-      2. If IsCallable(insertFn) is *true* then
-        1. Let _insertionValue_ be Call(insertFn, undefined) 
-        (what happens if no return value?)
-        2. Let _p_ be the Record { [[Key]]: _key_, [[Value]]: _insertionValue_ }.
-        3. Append _p_ as the last element of _entries_.
-        4. Return _p_.[[Value]]
-    6. Return *undefined*
+    7. If IsCallable(insertFn) is *true* then
+      1. Let _insertionValue_ be Call(insertFn, undefined) 
+      2. Let _p_ be the Record { [[Key]]: _key_, [[Value]]: _insertionValue_ }.
+      3. Append _p_ as the last element of _entries_.
+      4. Return _p_.[[Value]]
   </emu-alg>
 </emu-clause>
