@@ -76,14 +76,13 @@ map.set(key, updated);
 
 ## Implementations in other languages
 
-Similar functionality exists in other languages. (TODO: is there anything
-that performs both update and insert where the update is also applied to
-inserted values?)
+Similar functionality exists in other languages.
 
 **Java**
 
 * [`computeIfPresent`](https://docs.oracle.com/javase/9/docs/api/java/util/Map.html#computeIfPresent-K-java.util.function.BiFunction-) remaps existing entry
-
+* [`computeIfAbsent`](https://docs.oracle.com/javase/9/docs/api/java/util/Map.html#computeIfAbsent-K-java.util.function.Function-) insert if empty. computes
+the insertion value with a mapping function
 
 **C++**
 
@@ -97,10 +96,13 @@ specific new one, not by applying a function to the existing value
 **Rust**
 
 * [`and_modify`](https://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html#method.and_modify) Provides in-place mutable access to an occupied entry
+* [`or_insert`](https://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html#method.or_insert) inserts if empty
 
 
 **Python**
 
+* [`setDefault`](https://docs.python.org/3/library/stdtypes.html#dict.setdefault)
+Performs a `get` and an `insert`
 
 
 ## FAQ
