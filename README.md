@@ -43,6 +43,12 @@ if (!map.has(key)) {
 map.get(key).doThing();
 ```
 
+With this proposal:
+
+```js
+map.upsert(key, () => {}, () => value).doThing()
+```
+
 ### Either update or insert for a specific key
 You might get new data and want to calculate some aggregate if the key exists,
 but just insert if it's the first value at that key.
@@ -57,6 +63,12 @@ if (!old) {
 }
 ```
 
+With this proposal:
+
+```js
+map.upsert(key, () => updated, () => value)
+```
+
 ### Just insert if missing
 
 You might omit an update if you're handling data that doesn't change, but
@@ -67,6 +79,12 @@ can still be appended.
 if (!map1.has(key)) {
   map1.set(key, value);
 }
+```
+
+With this proposal:
+
+```js
+map.upsert(key, () => {}, () => value)
 ```
 
 ### Just update if present
@@ -81,6 +99,12 @@ if (map.has(key)) {
   updated = old.doThing();
   map.set(key, updated);
 }
+```
+
+With this proposal:
+
+```js
+map.upsert(key, old => old.doThing(), () => {})
 ```
 
 ## Implementations in other languages
