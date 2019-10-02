@@ -86,7 +86,9 @@ if (!map1.has(key)) {
 With this proposal:
 
 ```js
-map.upsert(key, () => {}, () => value)
+map.upsert(key, o => o, () => value);
+// or
+map.upsert(key, undefined, () => value);
 ```
 
 ### Just update if present
