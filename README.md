@@ -46,7 +46,9 @@ map.get(key).doThing();
 With this proposal:
 
 ```js
-map.upsert(key, () => {}, () => value).doThing()
+map.upsert(key, o => o, () => value).doThing();
+// or
+map.upsert(key, undefined, () => value).doThing();
 ```
 
 ### Either update or insert for a specific key
