@@ -50,12 +50,12 @@ contributors: Erica Pramer
     7. For each Record { [[Key]], [[Value]] } _e_ that is an element of _entries_, in original key insertion order, do
       1. If e.[[Key]] is not empty and SameValueZero(e.[[Key]], _key_) is *true* then
         1. If IsCallable(updateFn) is *true* then
-          1. Let _updated_ be ? Call(updateFn, undefined, « e.[[Value]] ») 
+          1. Let _updated_ be ? Call(updateFn, *undefined*, « e.[[Value]], _key_, _M_ »)
           2. Set _e_.[[Value]] to _updated_.
           3. Return _e_.[[Value]]
         2. Return _e_.[[Value]]
     8. If IsCallable(insertFn) is *true* then
-      1. Let _insertionValue_ be ? Call(insertFn, undefined) 
+      1. Let _insertionValue_ be ? Call(insertFn, *undefined*, « *undefined*, _key_, _M_ »)
       2. Let _p_ be the Record { [[Key]]: _key_, [[Value]]: _insertionValue_ }.
       3. Append _p_ as the last element of _entries_.
       4. Return _p_.[[Value]]
