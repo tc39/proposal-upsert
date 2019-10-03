@@ -37,4 +37,27 @@ contributors: Erica Pramer
       3. Append _p_ as the last element of _entries_.
       4. Return _p_.[[Value]]
   </emu-alg>
+
+  <h1>WeakMap.prototype.upsert(key, updateFn[, insertFn])`</h1>
+  <p>When the upsert method is called the following steps are taken:</p>
+  <emu-alg>
+    1. Let _M_ be the *this* value.
+    2. Perform ? RequireInternalSlot(M, [[WeakMapData]]).
+    3. Let entries be the List that is M.[[WeakMapData]].
+    4. If Type(_key_) is not Object, throw a *TypeError* exception.
+    5. If IsCallable(updateFn) is *false*, and IsCallable(insertFn) is *false*, throw a *TypeError* exception.
+    6. Let _entries_ be the List that is _M_.
+    7. For each Record { [[Key]], [[Value]] } _e_ that is an element of _entries_, in original key insertion order, do
+      1. If e.[[Key]] is not empty and SameValueZero(e.[[Key]], _key_) is *true* then
+        1. If IsCallable(updateFn) is *true* then
+          1. Let _updated_ be ? Call(updateFn, undefined, « e.[[Value]] ») 
+          2. Set _e_.[[Value]] to _updated_.
+          3. Return _e_.[[Value]]
+        2. Return _e_.[[Value]]
+    8. If IsCallable(insertFn) is *true* then
+      1. Let _insertionValue_ be ? Call(insertFn, undefined) 
+      2. Let _p_ be the Record { [[Key]]: _key_, [[Value]]: _insertionValue_ }.
+      3. Append _p_ as the last element of _entries_.
+      4. Return _p_.[[Value]]
+  </emu-alg>
 </emu-clause>
