@@ -108,7 +108,7 @@ if (map.has(key)) {
 With this proposal:
 
 ```js
-map.upsert(key, old => old.doThing()).doThing();
+map.upsert(key, old => old.doThing());
 // or
 map.upsert(key, old => old.doThing(), undefined);
 ```
