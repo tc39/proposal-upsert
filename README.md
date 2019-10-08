@@ -143,5 +143,5 @@ mutation?
 
 ## Specification
 
-* [Ecmarkup source](https://github.com/thumbsupep/proposal-upsert/blob/master/spec.emu)
-* [HTML version](https://thumbsupep.github.io/proposal-upsert/)
+* [Ecmarkup source](https://github.com/tc39/proposal-upsert/blob/master/spec.emu)
+* [HTML version](https://tc39.es/proposal-upsert/)
