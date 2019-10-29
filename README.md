@@ -175,3 +175,7 @@ mutation?
 
 * [Ecmarkup source](https://github.com/tc39/proposal-upsert/blob/master/spec.emu)
 * [HTML version](https://tc39.es/proposal-upsert/)
+
+## Polyfill
+
+A polyfill is available in the [core-js](https://github.com/zloirock/core-js) library. You can find it in the [ECMAScript proposals section](https://github.com/zloirock/core-js#mapupsert).
