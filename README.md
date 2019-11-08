@@ -6,7 +6,7 @@ ECMAScript proposal and reference implementation for `Map.prototype.upsert`.
 
 **Champion:** Erica Pramer (GoDaddy)
 
-**Stage:** 1
+**Stage:** 2
 
 ## Motivation
 
