@@ -142,6 +142,10 @@ a mapping function
 * [`setDefault`](https://docs.python.org/3/library/stdtypes.html#dict.setdefault)
 Performs a `get` and an `insert`
 
+**Elixir**
+
+* [`Map.update/4`](https://hexdocs.pm/elixir/Map.html#update/4) Updates the item with given function if key exists, otherwise inserts given initial value 
+
 ## FAQ
 
 - Is the goal to simplify the API or to optimize it?
