@@ -32,6 +32,8 @@ The proposed API allows a developer to do one lookup and update in place:
 upsert(key, old => updated, () => insertionValue)
 ```
 
+This matches the "update" and "insert" ordering of the portmanteau term "upsert".
+
 ### Normalization of values during insertion
 
 Currently you would need to do 3 lookups:
@@ -148,13 +150,15 @@ Performs a `get` and an `insert`
 
 ## FAQ
 
-- Is the goal to simplify the API or to optimize it?
+### Is the goal to simplify the API or to optimize it?
+
   - This proposal seeks to simplify expressing intent for programmers, and
   should ease optimization without complex analysis. For engines without
   complex analysis like IOT VMs this should see wins by avoiding multiple
   entry lookups, at potential call stack cost.
-- Why not use existing JS engines that optimize by coalescing the lookup and
-mutation? 
+
+### Why not use existing JS engines that optimize by coalescing the lookup and mutation?
+
   - This does not cover all patterns (of which there are many), things such as
   ordering can cause the optimization to fail.
 
@@ -164,13 +168,43 @@ mutation?
   x.get(a).push(1);
   y.get(b).push(2);
   ```
-- Why use functions instead of values for the parameters?
+
+### Why use functions instead of values for the parameters?
+
   - You may want to apply a factory function when inserting to avoid costs of
   potentially heavy allocation, or the key may be determined at insertion time.
+
+  ```mjs
+  // an example of when eager allocation of the value
+  // is undesirable
+  const sharedRequests = new Map();
+  function request(url) {
+    personIds.upsert(url, v => v, () => {
+      return fetch(url).then(() => {
+        sharedRequests.delete(url);
+      });
+    });
+  }
+  ```
+
   - When updating, we will be able to perform a function on the existing value
   instead of just replacing the value. The action may also cause mutation or
   side-effects, which would want to be avoided if not updating.
-- Why are we calling this `upsert`?
+
+  ```mjs
+  const eventCounts = new Map();
+  obj.onevent(
+    (eventName) => {
+      // this API allows working with value type and primitive values
+      eventCounts.upsert(eventName, n => n + 1, () => 1);
+    }
+  );
+  ```
+
+  This is important as new primitives like [BigInt] and [value types] are added to the language. This API should continue to be able to handle and work with such values as they are added.
+
+### Why are we calling this `upsert`?
+
   - It is a combination of "update" & "insert" that is already used in other
   programming situations and many SQL variants use that exact term.
   - `updateOrInsert` and `insertOrUpdate` seem too wordy.
@@ -183,3 +217,6 @@ mutation?
 ## Polyfill
 
 A polyfill is available in the [core-js](https://github.com/zloirock/core-js) library. You can find it in the [ECMAScript proposals section](https://github.com/zloirock/core-js#mapupsert).
+
+[BigInt]: https://tc39.es/ecma262/#sec-terms-and-definitions-bigint-value
+[value types]: https://github.com/tc39/proposal-record-tuple
