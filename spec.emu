@@ -16,7 +16,7 @@ contributors: Erica Pramer
 </emu-intro>
 
 <emu-clause id="sec-map.prototype.emplace">
-  <h1>Map.prototype.emplace(key, handler)`</h1>
+  <h1>Map.prototype.emplace(key, handler)</h1>
   <p>When the emplace method is called the following steps are taken:</p>
   <emu-alg>
     1. Let _M_ be the *this* value.
@@ -39,7 +39,7 @@ contributors: Erica Pramer
 </emu-clause>
 
 <emu-clause id="sec-weakmap.prototype.emplace">
-  <h1>WeakMap.prototype.emplace(key, updateFn [ , insertFn])`</h1>
+  <h1>WeakMap.prototype.emplace(key, updateFn [ , insertFn])</h1>
   <p>When the emplace method is called the following steps are taken:</p>
   <emu-alg>
     1. Let _M_ be the *this* value.

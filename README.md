@@ -1,6 +1,6 @@
-# `Map.prototype.upsert`
+# `Map.prototype.emplace`
 
-ECMAScript proposal and reference implementation for `Map.prototype.upsert`.
+ECMAScript proposal and reference implementation for `Map.prototype.emplace`.
 
 **Author:** Brad Farias (GoDaddy)
 
@@ -15,7 +15,7 @@ in conjunction. There are currently no `Map` prototype methods for either of
 those two things, let alone a method that does both. The workarounds involve
 multiple lookups and developer inconvenience.
 
-## Solution: `upsert`
+## Solution: `emplace`
 
 We propose the addition of a method that will add a value to a map if the map
 does not already have something at `key`, and will also update an existing 
@@ -25,14 +25,20 @@ It is also worthwhile for developer convenience and expression of intent.
 
 ## Examples & Proposed API
 
-The following examples would all be optimized and made simpler by `upsert`.
+The following examples would all be optimized and made simpler by `emplace`.
 The proposed API allows a developer to do one lookup and update in place:
 
 ```js
-upsert(key, old => updated, () => insertionValue)
+// given counts is a Map of object => id
+counts.emplace(key, {
+  insert(key, map) {
+    return 0;
+  },
+  update(existing, key, map) {
+    return existing + 1;
+  }
+});
 ```
-
-This matches the "update" and "insert" ordering of the portmanteau term "upsert".
 
 ### Normalization of values during insertion
 
@@ -48,9 +54,9 @@ map.get(key).doThing();
 With this proposal:
 
 ```js
-map.upsert(key, o => o, () => value).doThing();
-// or
-map.upsert(key, undefined, () => value).doThing();
+map.emplace(key, {
+  insert: () => value
+}).doThing();
 ```
 
 ### Either update or insert for a specific key
@@ -70,7 +76,10 @@ if (!old) {
 With this proposal:
 
 ```js
-map.upsert(key, () => updated, () => value)
+map.emplace(key, {
+  update: () => updated,
+  insert: () => value
+});
 ```
 
 ### Just insert if missing
@@ -88,9 +97,9 @@ if (!map1.has(key)) {
 With this proposal:
 
 ```js
-map.upsert(key, o => o, () => value);
-// or
-map.upsert(key, undefined, () => value);
+map.emplace(key, {
+  insert: () => value
+});
 ```
 
 ### Just update if present
@@ -110,9 +119,11 @@ if (map.has(key)) {
 With this proposal:
 
 ```js
-map.upsert(key, old => old.doThing());
-// or
-map.upsert(key, old => old.doThing(), undefined);
+if (map.has(key)) {
+  map.emplace(key, {
+    update: (old) => old.doThing()
+  });
+}
 ```
 
 ## Implementations in other languages
@@ -169,6 +180,32 @@ Performs a `get` and an `insert`
   y.get(b).push(2);
   ```
 
+### Why error if the key doesn't exist and no `insert` handler is provided.
+
+  - This keeps the return type constrained to the union of insert and update without adding `undefined`. This alleviates a variety of static checker errors from code such as the following.
+
+  ```mjs
+  // map is a Map of object values
+  let x;
+  if (map.has(key)) {
+    x = map.get(key); // can return undefined
+  } else {
+    x = {};
+    map.set(key, x);
+  }
+  // x's type is `undefined | object` 
+  ```
+
+  The proposal could guarantee that the type does not include `undefined`:
+
+  ```mjs
+  // map is a Map of object values
+  let x = map.emplace(key, {
+    insert: () => { return {}; }
+  });
+  // x's type is `object`
+  ```
+
 ### Why use functions instead of values for the parameters?
 
   - You may want to apply a factory function when inserting to avoid costs of
@@ -179,10 +216,12 @@ Performs a `get` and an `insert`
   // is undesirable
   const sharedRequests = new Map();
   function request(url) {
-    personIds.upsert(url, v => v, () => {
-      return fetch(url).then(() => {
-        sharedRequests.delete(url);
-      });
+    return sharedRequests.emplace(url, {
+      insert: () => {
+        return fetch(url).then(() => {
+          sharedRequests.delete(url);
+        });
+      }
     });
   }
   ```
@@ -196,18 +235,23 @@ Performs a `get` and an `insert`
   obj.onevent(
     (eventName) => {
       // this API allows working with value type and primitive values
-      eventCounts.upsert(eventName, n => n + 1, () => 1);
+      eventCounts.emplace(eventName, {
+        update: (n) => n + 1,
+        insert: () => 1
+      });
     }
   );
   ```
 
-  This is important as new primitives like [BigInt] and [value types] are added to the language. This API should continue to be able to handle and work with such values as they are added.
+  This is important as primitives like [BigInt], [Records, and Tuples](Records and Tuples), etc. are added to the language. This API should continue to be able to handle and work with such values as they are added.
 
-### Why are we calling this `upsert`?
+### Why are we calling this `emplace`?
 
-  - It is a combination of "update" & "insert" that is already used in other
-  programming situations and many SQL variants use that exact term.
   - `updateOrInsert` and `insertOrUpdate` seem too wordy.
+    - in the case that only an `insert` operation is provided it will do neither update nor insert.
+  - `upsert` was seen as too unique a term and the ordering was problematic as there was a desire to focus on insertion.
+    - ~~It is a combination of "update" & "insert" that is already used in other programming situations and many SQL variants use that exact term.~~
+  - `emplace` matches a naming precedent from C++.
 
 ## Specification
 
@@ -219,4 +263,4 @@ Performs a `get` and an `insert`
 A polyfill is available in the [core-js](https://github.com/zloirock/core-js) library. You can find it in the [ECMAScript proposals section](https://github.com/zloirock/core-js#mapupsert).
 
 [BigInt]: https://tc39.es/ecma262/#sec-terms-and-definitions-bigint-value
-[value types]: https://github.com/tc39/proposal-record-tuple
+[Records and Tuples]: https://github.com/tc39/proposal-record-tuple
