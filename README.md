@@ -253,6 +253,11 @@ Performs a `get` and an `insert`
     - ~~It is a combination of "update" & "insert" that is already used in other programming situations and many SQL variants use that exact term.~~
   - `emplace` matches a naming precedent from C++.
 
+### What happens during re-entrancy?
+
+  - Other methods like Array methods while iterating using a higher order function do not re-iterate if mutated in a re-entrant manner. This method will modify the underlying storage cell that contains the existing value and any mutation of the map will act on new storage cells if that cell is removed from the map. This method will not perform a second lookup if the storage cell in the collection for the key is replaced with a new one. 
+  - See [issue #9] for more.
+
 ## Specification
 
 * [Ecmarkup source](https://github.com/tc39/proposal-upsert/blob/master/spec.emu)
@@ -264,3 +269,4 @@ A polyfill is available in the [core-js](https://github.com/zloirock/core-js) li
 
 [BigInt]: https://tc39.es/ecma262/#sec-terms-and-definitions-bigint-value
 [Records and Tuples]: https://github.com/tc39/proposal-record-tuple
+[issue #9]: https://github.com/tc39/proposal-upsert/issues/9#issuecomment-552490289
