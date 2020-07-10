@@ -206,6 +206,22 @@ Performs a `get` and an `insert`
   // x's type is `object`
   ```
 
+### Why not have a single function that has a boolean if performing an update and the potentially existing value?
+
+  - By naming the handlers, you can increase readability and reduce overall boilerplate. Additionally, generally there are not common workflows that have code paths that cover both updating and insertion. See the following which only seeks to insert a value if none exists:
+
+  ```mjs
+  x = map.emplace(key, (updating, value) => updating ? value : []);
+  ```
+
+  The proposal allows a handler to avoid the boilerplate condition and focus only on the relevant workflows:
+
+  ```mjs
+  x = map.emplace(key, {
+    insert: () => []
+  });
+  ```
+
 ### Why use functions instead of values for the parameters?
 
   - You may want to apply a factory function when inserting to avoid costs of
