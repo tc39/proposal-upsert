@@ -222,6 +222,98 @@ Performs a `get` and an `insert`
   });
   ```
 
+### Why not have a single function that inserts the value if no such key is mapped?
+
+  - By only having a single function that inserts a variety of workflows become
+  less clear.
+
+  ```mjs
+  // have to set the default value to -1, not 0
+  const n = counts.emplace(key, () => -1);
+  // have to perform an additional set afterwards
+  counts.set(key, n + 1);
+  ```
+
+  The proposal allows a handler to avoid the odd default value and avoid the
+  extra `.set`. This does still require coding logic for both, but keeps the
+  intent more readable and localized.
+
+  ```mjs
+  counts.emplace(key, {
+    insert: () => 0,
+    update: (v) => v + 1
+  });
+  ```
+
+### Why not have a single function that updates the value if no if the key is mapped?
+
+  - By only having a single function that updates a variety of workflows
+  become less clear. In particular in order to guarantee that the result type
+  is not a union with `undefined` it should error if the key is not mapped.
+
+  ```mjs
+  let n;
+  try {
+    n = counts.emplace(key, (existing) => existing + 1);
+  } catch (e) {
+    // this is a fragile detection and quite hard to determine it was
+    // counts.emplace that caused an error, and not something internal to
+    // the update callback
+    if (e instanceof MissingEntryError) {
+      counts.set(key, n = 0);
+    }
+  }
+  if (n > RETRIES) {
+    // ...
+  }
+  ```
+
+  A alteration to return a boolean to see if an action is taken requires
+  boilerplate and reduces the utility of the return value:
+
+  ```mjs
+  let updated = counts.emplace(key, (existing) => existing + 1);
+  if (!updated) {
+    counts.set(key, 0);
+  }
+  let n = counts.get(key);
+  if (n > RETRIES) {
+    // ...
+  }
+  ```
+
+  The proposal allows a handler to avoid the odd default value and avoid the
+  extra `.set`.
+
+  ```mjs
+  let n = counts.emplace(key, {
+    insert: () => 0,
+    update: (v) => v + 1
+  });
+  if (n > RETRIES) {
+    // ...
+  }
+  ```
+
+### Why not have an API that exposes an Entry to collection types?
+
+  - An Entry API is not prevented by this proposal. Explicit thought about
+  re-entrancy was taken into consideration and was designed not to conflict with
+  such an API. Desires for such an API should be done in a separate proposal.
+  - An Entry API has much stricter implications on how implementations must
+  store the backing data for a collection due to creating persistent references.
+  - An Entry API is extremely complex regarding shared mutability and should be
+  considered to be an extreme increase in scope to the goals of this proposal.
+  See complexity such as the following about needing to think of an design an
+  entire lifecycle and sharing scheme for multiple entry references:
+
+  ```mjs
+  let entry1 = map.mutableEntry(key);
+  let entry2 = map.mutableEntry(key);
+  entry2.remove();
+  entry1.insertIfMissing(0);
+  ```
+
 ### Why use functions instead of values for the parameters?
 
   - You may want to apply a factory function when inserting to avoid costs of
@@ -264,7 +356,7 @@ Performs a `get` and an `insert`
 ### Why are we calling this `emplace`?
 
   - `updateOrInsert` and `insertOrUpdate` seem too wordy.
-    - in the case that only an `insert` operation is provided it will do neither update nor insert.
+    - in the case that only an `insert` operation is provided it may do neither update nor insert.
   - `upsert` was seen as too unique a term and the ordering was problematic as there was a desire to focus on insertion.
     - ~~It is a combination of "update" & "insert" that is already used in other programming situations and many SQL variants use that exact term.~~
   - `emplace` matches a naming precedent from C++.
