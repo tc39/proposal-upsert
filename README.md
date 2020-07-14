@@ -69,7 +69,7 @@ old = map.get(key);
 if (!old) {
   map.set(key, value);
 } else {
-  map.set(key, old => updated);
+  map.set(key, updated);
 }
 ```
 
