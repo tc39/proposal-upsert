@@ -22,14 +22,15 @@ contributors: Erica Pramer
     1. Let _M_ be the *this* value.
     1. Perform ? RequireInternalSlot(_M_, [[MapData]]).
     1. Let _entries_ be the List that is _M_.[[MapData]].
+    1. Let _insertFn_ be ? GetMethod(_handler_, "insert").
+    1. Let _updateFn_ be ? GetMethod(_handler_, "update").
     1. For each Record { [[Key]], [[Value]] } _e_ that is an element of _entries_, do
       1. If _e_.[[Key]] is not empty and SameValueZero(_e_.[[Key]], _key_) is *true*, then
-        1. If HasProperty(_handler_, "update") is *true*, then
-          1. Let _updateFn_ be ? Get(_handler_, "update").
+        1. If _updateFn_ is not *undefined*, then
           1. Let _updated_ be ? Call(_updateFn_, _handler_, « e.[[Value]], _key_, _M_ »).
           1. Set _e_.[[Value]] to _updated_.
         1. Return _e_.[[Value]].
-    1. Let _insertFn_ be ? Get(_handler_, "insert").
+    1. If _insertFn_ is *undefined*, then throw a *TypeError* exception.
     1. Let _inserted_ be ? Call(_insertFn_, _handler_, « e.[[Value]], _key_, _M_ »).
     1. Set _e_.[[Value]] to _inserted_.
     1. Return _e_.[[Value]].
@@ -43,14 +44,15 @@ contributors: Erica Pramer
     1. Let _M_ be the *this* value.
     1. Perform ? RequireInternalSlot(_M_, [[WeakMapData]]).
     1. Let _entries_ be the List that is _M_.[[WeakMapData]].
+    1. Let _updateFn_ be ? GetMethod(_handler_, "update").
+    1. Let _insertFn_ be ? GetMethod(_handler_, "insert").
     1. For each Record { [[Key]], [[Value]] } _e_ that is an element of _entries_, do
       1. If _e_.[[Key]] is not empty and SameValueZero(_e_.[[Key]], _key_) is *true*, then
-        1. If HasProperty(_handler_, "update") is *true*, then
-          1. Let _updateFn_ be ? Get(_handler_, "update").
+        1. If _updateFn_ is not *undefined*, then
           1. Let _updated_ be ? Call(_updateFn_, _handler_, « e.[[Value]], _key_, _M_ »)
           1. Set _e_.[[Value]] to _updated_.
         1. Return _e_.[[Value]].
-    1. Let _insertFn_ be ? Get(_handler_, "insert").
+    1. If _insertFn_ is *undefined*, then throw a *TypeError* exception.
     1. Let _inserted_ be ? Call(_insertFn_, _handler_, « e.[[Value]], _key_, _M_ »)
     1. Set _e_.[[Value]] to _inserted_.
     1. Return _e_.[[Value]].
