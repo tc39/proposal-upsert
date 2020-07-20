@@ -16,47 +16,43 @@ contributors: Erica Pramer
 </emu-intro>
 
 <emu-clause id="sec-map.prototype.emplace">
-  <h1>Map.prototype.emplace(key, handler)</h1>
+  <h1>Map.prototype.emplace ( _key_, _handler_ )</h1>
   <p>When the emplace method is called the following steps are taken:</p>
   <emu-alg>
     1. Let _M_ be the *this* value.
-    2. Perform ? RequireInternalSlot(M, [[MapData]]).
-    3. Let entries be the List that is M.[[MapData]].
-    5. Let _entries_ be the List that is _M_.
-    6. For each Record { [[Key]], [[Value]] } _e_ that is an element of _entries_, in original key insertion order, do
-      1. If e.[[Key]] is not empty and SameValueZero(e.[[Key]], _key_) is *true* then
-        1. If HasProperty(_handler_, "update") is *true* then
-          1. Let _updateFn_ be Get(_handler_, "update").
-          2. Let _updated_ be ? Call(_updateFn_, _handler_, « e.[[Value]], _key_, _M_ ») 
-          3. Set _e_.[[Value]] to _updated_.
-          4. Return _e_.[[Value]]
-        2. Return _e_.[[Value]]
-    7. Let _insertFn_ be Get(_handler_, "insert").
-    8. Let _inserted_ be ? Call(_insertFn_, _handler_, « e.[[Value]], _key_, _M_ ») 
-    9. Set _e_.[[Value]] to _inserted_.
-    10. Return _e_.[[Value]]
+    1. Perform ? RequireInternalSlot(_M_, [[MapData]]).
+    1. Let _entries_ be the List that is _M_.[[MapData]].
+    1. For each Record { [[Key]], [[Value]] } _e_ that is an element of _entries_, do
+      1. If _e_.[[Key]] is not empty and SameValueZero(_e_.[[Key]], _key_) is *true*, then
+        1. If HasProperty(_handler_, "update") is *true*, then
+          1. Let _updateFn_ be ? Get(_handler_, "update").
+          1. Let _updated_ be ? Call(_updateFn_, _handler_, « e.[[Value]], _key_, _M_ »).
+          1. Set _e_.[[Value]] to _updated_.
+        1. Return _e_.[[Value]].
+    1. Let _insertFn_ be ? Get(_handler_, "insert").
+    1. Let _inserted_ be ? Call(_insertFn_, _handler_, « e.[[Value]], _key_, _M_ »).
+    1. Set _e_.[[Value]] to _inserted_.
+    1. Return _e_.[[Value]].
   </emu-alg>
 </emu-clause>
 
 <emu-clause id="sec-weakmap.prototype.emplace">
-  <h1>WeakMap.prototype.emplace(key, handler)</h1>
+  <h1>WeakMap.prototype.emplace ( _key_, _handler_ )</h1>
   <p>When the emplace method is called the following steps are taken:</p>
   <emu-alg>
     1. Let _M_ be the *this* value.
-    2. Perform ? RequireInternalSlot(M, [[WeakMapData]]).
-    3. Let entries be the List that is M.[[WeakMapData]].
-    5. Let _entries_ be the List that is _M_.
-    6. For each Record { [[Key]], [[Value]] } _e_ that is an element of _entries_, in original key insertion order, do
-      1. If e.[[Key]] is not empty and SameValueZero(e.[[Key]], _key_) is *true* then
-        1. If HasProperty(_handler_, "update") is *true* then
-          1. Let _updateFn_ be Get(_handler_, "update").
-          2. Let _updated_ be ? Call(_updateFn_, _handler_, « e.[[Value]], _key_, _M_ ») 
-          3. Set _e_.[[Value]] to _updated_.
-          4. Return _e_.[[Value]]
-        2. Return _e_.[[Value]]
-    7. Let _insertFn_ be Get(_handler_, "insert").
-    8. Let _inserted_ be ? Call(_insertFn_, _handler_, « e.[[Value]], _key_, _M_ ») 
-    9. Set _e_.[[Value]] to _inserted_.
-    10. Return _e_.[[Value]]
+    1. Perform ? RequireInternalSlot(_M_, [[WeakMapData]]).
+    1. Let _entries_ be the List that is _M_.[[WeakMapData]].
+    1. For each Record { [[Key]], [[Value]] } _e_ that is an element of _entries_, do
+      1. If _e_.[[Key]] is not empty and SameValueZero(_e_.[[Key]], _key_) is *true*, then
+        1. If HasProperty(_handler_, "update") is *true*, then
+          1. Let _updateFn_ be ? Get(_handler_, "update").
+          1. Let _updated_ be ? Call(_updateFn_, _handler_, « e.[[Value]], _key_, _M_ »)
+          1. Set _e_.[[Value]] to _updated_.
+        1. Return _e_.[[Value]].
+    1. Let _insertFn_ be ? Get(_handler_, "insert").
+    1. Let _inserted_ be ? Call(_insertFn_, _handler_, « e.[[Value]], _key_, _M_ »)
+    1. Set _e_.[[Value]] to _inserted_.
+    1. Return _e_.[[Value]].
   </emu-alg>
 </emu-clause>
