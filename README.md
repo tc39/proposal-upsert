@@ -264,7 +264,7 @@ Performs a `get` and an `insert`
   
   This can be rewritten to be less error prone by moving `getName` above
   
-  ```
+  ```mjs
   updateNameOf(key) {
     // inserted and can be assured of same reference on .get
     contact.name = getName();
