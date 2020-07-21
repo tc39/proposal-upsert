@@ -13,7 +13,8 @@ ECMAScript proposal and reference implementation for `Map.prototype.emplace`.
 Adding and updating values of a Map are tasks that developers often perform 
 in conjunction. There are currently no `Map` prototype methods for either of
 those two things, let alone a method that does both. The workarounds involve
-multiple lookups and developer inconvenience.
+multiple lookups and developer inconvenience while avoiding encouraging code
+that is surprising or is potentially error prone.
 
 ## Solution: `emplace`
 
@@ -225,7 +226,8 @@ Performs a `get` and an `insert`
 ### Why not have a single function that inserts the value if no such key is mapped?
 
   - By only having a single function that inserts a variety of workflows become
-  less clear.
+  less clear. In particular, by only having insert, a usage of a default value must
+  be inserted with an anti-update operation already applied.
 
   ```mjs
   // have to set the default value to -1, not 0
@@ -244,6 +246,64 @@ Performs a `get` and an `insert`
     update: (v) => v + 1
   });
   ```
+  
+  - This can also lead to insertion of values that are incomplete/invalid regarding
+  the intended type of the Map:
+  
+  
+  ```mjs
+  updateNameOf(key) {
+    // contacts only has objects which must have a string value
+    const contact = contacts.insert(key, () => ({name:null}));
+    // inserted and can be assured of same reference on .get
+    contact.name = getName();
+    // if getName throws, contact is incomplete/invalid
+    // .name remains null
+  }
+  ```
+  This can be rewritten to be less error prone by moving `getName` above
+  
+  ```
+  updateNameOf(key) {
+    // inserted and can be assured of same reference on .get
+    contact.name = getName();
+    // contacts only has objects which must have a string value
+    const contact = contacts.insert(key, () => ({name:null}));
+    contact.name = name;
+  }
+  ```
+  
+  This code is less error prone (unless contact.name fails assignment for
+  example), but it still has an invalid value being inserted into the map.
+  
+  This can again be rewritten to be less constraint breaking by avoiding
+  `insert()` entirely.
+  
+  ```mjs
+  updateNameOf(key) {
+    const name = getName();
+    const existing = contacts.get(key) ?? {name:null};
+    contact.name = name;
+    contacts.set(key);
+  }
+  ```
+  
+  This design does avoid ever inserting the invalid value into the map, but is
+  a bit confusing to read. This proposal by combinding update and insert can be
+  a little clearer:
+  
+  ```mjs
+  updateNameOf(key, name) {
+    const name = getName();
+    contacts.emplace(key, {
+      insert: () => ({name}),
+      update: (contact) => contact.name = name
+    });
+  }
+  ```
+  
+  by having both operations co-located it would feel odd to try and `getName`
+  after `.emplace` and no invalid value is inserted into the map.
 
 ### Why not have a single function that updates the value if no if the key is mapped?
 
