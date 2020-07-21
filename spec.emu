@@ -20,21 +20,21 @@ contributors: Erica Pramer
   <p>When the emplace method is called the following steps are taken:</p>
   <emu-alg>
     1. Let _M_ be the *this* value.
-    2. Perform ? RequireInternalSlot(_M_, [[MapData]]).
-    3. Let _entries_ be the List that is _M_.[[MapData]].
-    6. For each Record { [[Key]], [[Value]] } _e_ that is an element of _entries_, in original key insertion order, do
+    1. Perform ? RequireInternalSlot(_M_, [[MapData]]).
+    1. Let _entries_ be the List that is _M_.[[MapData]].
+    1. For each Record { [[Key]], [[Value]] } _e_ that is an element of _entries_, in original key insertion order, do
       1. If _e_.[[Key]] is not ~empty~ and SameValueZero(_e_.[[Key]], _key_) is *true*, then
         1. If ? HasProperty(_handler_, *"update"*) is *true*, then
           1. Let _updateFn_ be ? Get(_handler_, *"update"*).
-          2. Let _updated_ be ? Call(_updateFn_, _handler_, « _e_.[[Value]], _key_, _M_ »).
-          3. Set _e_.[[Value]] to _updated_.
-        2. Return _e_.[[Value]].
-    7. Let _insertFn_ be ? Get(_handler_, *"insert"*).
-    8. Let _inserted_ be ? Call(_insertFn_, _handler_, « _key_, _M_ »).
+          1. Let _updated_ be ? Call(_updateFn_, _handler_, « _e_.[[Value]], _key_, _M_ »).
+          1. Set _e_.[[Value]] to _updated_.
+        1. Return _e_.[[Value]].
+    1. Let _insertFn_ be ? Get(_handler_, *"insert"*).
+    1. Let _inserted_ be ? Call(_insertFn_, _handler_, « _key_, _M_ »).
     1. If _key_ is *-0*, set _key_ to *+0*.
     1. Let _e_ be the Record { [[Key]]: _key_, [[Value]]: _inserted_ }.
     1. Append _e_ as the last element of _entries_.
-    10. Return _e_.[[Value]].
+    1. Return _e_.[[Value]].
   </emu-alg>
 </emu-clause>
 
@@ -43,20 +43,20 @@ contributors: Erica Pramer
   <p>When the emplace method is called the following steps are taken:</p>
   <emu-alg>
     1. Let _M_ be the *this* value.
-    2. Perform ? RequireInternalSlot(_M_, [[WeakMapData]]).
-    3. Let _entries_ be the List that is _M_.[[WeakMapData]].
+    1. Perform ? RequireInternalSlot(_M_, [[WeakMapData]]).
+    1. Let _entries_ be the List that is _M_.[[WeakMapData]].
     1. If Type(_key_) is not Object, throw a *TypeError* exception.
-    6. For each Record { [[Key]], [[Value]] } _e_ that is an element of _entries_, do
+    1. For each Record { [[Key]], [[Value]] } _e_ that is an element of _entries_, do
       1. If _e_.[[Key]] is not ~empty~ and SameValue(_e_.[[Key]], _key_) is *true*, then
         1. If ? HasProperty(_handler_, *"update"*) is *true*, then
           1. Let _updateFn_ be ? Get(_handler_, *"update"*).
-          2. Let _updated_ be ? Call(_updateFn_, _handler_, « _e_.[[Value]], _key_, _M_ »).
-          3. Set _e_.[[Value]] to _updated_.
-        2. Return _e_.[[Value]].
-    7. Let _insertFn_ be ? Get(_handler_, *"insert"*).
-    8. Let _inserted_ be ? Call(_insertFn_, _handler_, « _key_, _M_ »).
+          1. Let _updated_ be ? Call(_updateFn_, _handler_, « _e_.[[Value]], _key_, _M_ »).
+          1. Set _e_.[[Value]] to _updated_.
+        1. Return _e_.[[Value]].
+    1. Let _insertFn_ be ? Get(_handler_, *"insert"*).
+    1. Let _inserted_ be ? Call(_insertFn_, _handler_, « _key_, _M_ »).
     1. Let _e_ be the Record { [[Key]]: _key_, [[Value]]: _inserted_ }.
     1. Append _e_ as the last element of _entries_.
-    10. Return _e_.[[Value]].
+    1. Return _e_.[[Value]].
   </emu-alg>
 </emu-clause>
