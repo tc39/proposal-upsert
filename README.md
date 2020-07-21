@@ -266,7 +266,7 @@ Performs a `get` and an `insert`
   
   ```mjs
   updateNameOf(key) {
-    contact.name = getName();
+    const name = getName();
     const contact = contacts.insert(key, () => ({name:null}));
     contact.name = name;
   }
