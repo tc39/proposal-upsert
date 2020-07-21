@@ -298,7 +298,10 @@ Performs a `get` and an `insert`
     const name = getName();
     contacts.emplace(key, {
       insert: () => ({name}),
-      update: (contact) => contact.name = name
+      update: (contact) => {
+        contact.name = name;
+        return contact;
+      }
     });
   }
   ```
