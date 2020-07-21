@@ -266,9 +266,7 @@ Performs a `get` and an `insert`
   
   ```mjs
   updateNameOf(key) {
-    // inserted and can be assured of same reference on .get
     contact.name = getName();
-    // contacts only has objects which must have a string value
     const contact = contacts.insert(key, () => ({name:null}));
     contact.name = name;
   }
@@ -290,7 +288,7 @@ Performs a `get` and an `insert`
   ```
   
   This design does avoid ever inserting the invalid value into the map, but is
-  a bit confusing to read. This proposal by combinding update and insert can be
+  a bit confusing to read. This proposal by combining update and insert can be
   a little clearer:
   
   ```mjs
