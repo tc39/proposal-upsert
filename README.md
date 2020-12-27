@@ -120,11 +120,9 @@ if (map.has(key)) {
 With this proposal:
 
 ```js
-if (map.has(key)) {
-  map.emplace(key, {
-    update: (old) => old.doThing()
-  });
-}
+map.emplace(key, {
+  update: (old) => old.doThing()
+});
 ```
 
 ## Implementations in other languages
