@@ -30,7 +30,7 @@ contributors: Erica Pramer
           1. Set _e_.[[Value]] to _updated_.
         1. Return _e_.[[Value]].
     1. Let _insertFn_ be ? Get(_handler_, "insert").
-    1. Let _inserted_ be ? Call(_insertFn_, _handler_, « e.[[Value]], _key_, _M_ »).
+    1. Let _inserted_ be ? Call(_insertFn_, _handler_, « _key_, _M_ »).
     1. Set _e_.[[Value]] to _inserted_.
     1. Return _e_.[[Value]].
   </emu-alg>
@@ -51,7 +51,7 @@ contributors: Erica Pramer
           1. Set _e_.[[Value]] to _updated_.
         1. Return _e_.[[Value]].
     1. Let _insertFn_ be ? Get(_handler_, "insert").
-    1. Let _inserted_ be ? Call(_insertFn_, _handler_, « e.[[Value]], _key_, _M_ »)
+    1. Let _inserted_ be ? Call(_insertFn_, _handler_, « _key_, _M_ »)
     1. Set _e_.[[Value]] to _inserted_.
     1. Return _e_.[[Value]].
   </emu-alg>
