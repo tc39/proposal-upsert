@@ -380,14 +380,28 @@ Performs a `get` and an `insert`
 
   - You may want to apply a factory function when inserting to avoid costs of
   potentially heavy allocation, or the key may be determined at insertion time.
+  The action may also cause mutation or side-effects, which we might want to
+  avoid if not inserting.
 
   ```mjs
-  // an example of when eager allocation of the value
-  // is undesirable
+  // example when the same insert function is reused for multiple keys
+  const map = new Map();
+  const emplaceActions = {
+    insert: (key, map) => {
+      return Math.random() * key.length;
+    }
+  };
+  for (const key of getSomeKeys()) {
+    map.emplace(key, emplaceActions);
+  }
+
+  // example when eager allocation of the value is undesirable since it
+  // consumes resources and/or has unintended side-effects
   const sharedRequests = new Map();
   function request(url) {
     return sharedRequests.emplace(url, {
       insert: () => {
+        // we only want to fetch if it will actually be inserted
         return fetch(url).then(() => {
           sharedRequests.delete(url);
         });
@@ -398,7 +412,7 @@ Performs a `get` and an `insert`
 
   - When updating, we will be able to perform a function on the existing value
   instead of just replacing the value. The action may also cause mutation or
-  side-effects, which would want to be avoided if not updating.
+  side-effects, which we might want to avoid if not updating.
 
   ```mjs
   const eventCounts = new Map();
@@ -413,7 +427,7 @@ Performs a `get` and an `insert`
   );
   ```
 
-  This is important as primitives like [BigInt], [Records, and Tuples](Records and Tuples), etc. are added to the language. This API should continue to be able to handle and work with such values as they are added.
+  This is important as primitives like [BigInt], [Records, and Tuples][Records and Tuples], etc. are added to the language. This API should continue to be able to handle and work with such values as they are added.
 
 ### Why are we calling this `emplace`?
 
