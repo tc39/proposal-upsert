@@ -4,55 +4,71 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
 <script src="./spec.js"></script>
 <pre class="metadata">
-title: Map.prototype.emplace
+title: Map.prototype.getOrInsert
 stage: 2
-contributors: Erica Pramer
+contributors: Jonas Haukenes, Daniel Minor
 </pre>
 
 <emu-intro id="intro">
   <h1>Introduction</h1>
-  <p>Given a `key` and a handler object, the `emplace` method will either remap an existing entry, insert a new entry from a mapping function, or both. `emplace` will return
-  the updated or inserted value.</p>
+  <p>Given a `key` and a value, the `getOrInsert` method will return the existing value if it exists, or otherwise
+  insert the provided default value and return that value.</p>
+  <p>Similarly, given a `key` and a callback function, the `getOrInsert` method will return the existing value if it
+  exists, or otherwise insert the returned value of the callback function, and return that value.</p>
 </emu-intro>
 
-<emu-clause id="sec-map.prototype.emplace">
-  <h1>Map.prototype.emplace ( _key_, _handler_ )</h1>
-  <p>When the emplace method is called the following steps are taken:</p>
+<emu-clause id="sec-map.prototype.getOrInsert">
+  <h1>Map.prototype.getOrInsert ( _key_, _value_ )</h1>
+  <p>When the getOrInsert method is called the following steps are taken:</p>
   <emu-alg>
     1. Let _M_ be the *this* value.
     1. Perform ? RequireInternalSlot(_M_, [[MapData]]).
-    1. Let _entries_ be the List that is _M_.[[MapData]].
-    1. For each Record { [[Key]], [[Value]] } _e_ that is an element of _entries_, do
-      1. If _e_.[[Key]] is not empty and SameValueZero(_e_.[[Key]], _key_) is *true*, then
-        1. If HasProperty(_handler_, "update") is *true*, then
-          1. Let _updateFn_ be ? Get(_handler_, "update").
-          1. Let _updated_ be ? Call(_updateFn_, _handler_, « e.[[Value]], _key_, _M_ »).
-          1. Set _e_.[[Value]] to _updated_.
-        1. Return _e_.[[Value]].
-    1. Let _insertFn_ be ? Get(_handler_, "insert").
-    1. Let _inserted_ be ? Call(_insertFn_, _handler_, « e.[[Value]], _key_, _M_ »).
-    1. Set _e_.[[Value]] to _inserted_.
-    1. Return _e_.[[Value]].
+    1. For each Record { [[Key]], [[Value]] } _p_ of _M_.[[MapData]], do
+      1. If _p_.[[Key]] is not empty and SameValueZero(_p_.[[Key]], _key_) is *true*, return _p_.[[Value]].
+      1. Set _p_.[[Value]] to _value_.
+      1. Return _p_.[[Value]].
   </emu-alg>
 </emu-clause>
 
-<emu-clause id="sec-weakmap.prototype.emplace">
-  <h1>WeakMap.prototype.emplace ( _key_, _handler_ )</h1>
-  <p>When the emplace method is called the following steps are taken:</p>
+<emu-clause id="sec-map.prototype.getOrInsertComputed">
+  <h1>Map.prototype.getOrInsertComputed ( _key_, _callbackfn_ )</h1>
+  <p>When the getOrInsertComputed method is called the following steps are taken:</p>
+  <emu-alg>
+    1. Let _M_ be the *this* value.
+    1. Perform ? RequireInternalSlot(_M_, [[MapData]]).
+    1. If IsCallable(_callbackfn_) is false, throw a *TypeError* exception.
+    1. For each Record { [[Key]], [[Value]] } _p_ of _M_.[[MapData]], do
+      1. If _p_.[[Key]] is not empty and SameValueZero(_p_.[[Key]], _key_) is *true*, return _p_.[[Value]].
+      1. Let _value_ be ? Call(_callbackfn_, _key_).
+      1. Set _p_.[[Value]] to _value_.
+      1. Return _p_.[[Value]].
+  </emu-alg>
+</emu-clause>
+
+<emu-clause id="sec-weakmap.prototype.getOrInsert">
+  <h1>WeakMap.prototype.getOrInsert ( _key_, _value_ )</h1>
+  <p>When the getOrInsert method is called the following steps are taken:</p>
   <emu-alg>
     1. Let _M_ be the *this* value.
     1. Perform ? RequireInternalSlot(_M_, [[WeakMapData]]).
-    1. Let _entries_ be the List that is _M_.[[WeakMapData]].
-    1. For each Record { [[Key]], [[Value]] } _e_ that is an element of _entries_, do
-      1. If _e_.[[Key]] is not empty and SameValueZero(_e_.[[Key]], _key_) is *true*, then
-        1. If HasProperty(_handler_, "update") is *true*, then
-          1. Let _updateFn_ be ? Get(_handler_, "update").
-          1. Let _updated_ be ? Call(_updateFn_, _handler_, « e.[[Value]], _key_, _M_ »)
-          1. Set _e_.[[Value]] to _updated_.
-        1. Return _e_.[[Value]].
-    1. Let _insertFn_ be ? Get(_handler_, "insert").
-    1. Let _inserted_ be ? Call(_insertFn_, _handler_, « e.[[Value]], _key_, _M_ »)
-    1. Set _e_.[[Value]] to _inserted_.
-    1. Return _e_.[[Value]].
+    1. For each Record { [[Key]], [[Value]] } _p_ of _M_.[[MapData]], do
+      1. If _p_.[[Key]] is not empty and SameValueZero(_p_.[[Key]], _key_) is *true*, return _p_.[[Value]].
+      1. Set _p_.[[Value]] to _value_.
+      1. Return _p_.[[Value]].
+  </emu-alg>
+</emu-clause>
+
+<emu-clause id="sec-weakmap.prototype.getOrInsertComputed">
+  <h1>WeakMap.prototype.getOrInsertComputed ( _key_, _callbackfn_ )</h1>
+  <p>When the getOrInsertComputed method is called the following steps are taken:</p>
+  <emu-alg>
+    1. Let _M_ be the *this* value.
+    1. Perform ? RequireInternalSlot(_M_, [[WeakMapData]]).
+    1. If IsCallable(_callbackfn_) is false, throw a *TypeError* exception.
+    1. For each Record { [[Key]], [[Value]] } _p_ of _M_.[[MapData]], do
+      1. If _p_.[[Key]] is not empty and SameValueZero(_p_.[[Key]], _key_) is *true*, return _p_.[[Value]].
+      1. Let _value_ be ? Call(_callbackfn_, _key_).
+      1. Set _p_.[[Value]] to _value_.
+      1. Return _p_.[[Value]].
   </emu-alg>
 </emu-clause>
