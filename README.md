@@ -1,6 +1,6 @@
-# `Map.prototype.getOrInsert`
+# `Proposal Upsert`
 
-ECMAScript proposal and reference implementation for `Map.prototype.getOrInsert`.
+ECMAScript proposal and reference implementation for `Map.prototype.getOrInsert` and `Map.prototype.getOrInsertComputed`.
 
 **Authors:** Daniel Minor (Mozilla) Lauritz Thoresen Angeltveit (Bergen) Jonas Haukenes (Bergen) Sune Lianes (Bergen) Vetle Larsen (Bergen) Mathias Hop Ness (Bergen)
 
