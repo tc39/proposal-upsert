@@ -1,4 +1,4 @@
-# `Proposal Upsert`
+# Proposal Upsert
 
 ECMAScript proposal and reference implementation for `Map.prototype.getOrInsert` and `Map.prototype.getOrInsertComputed`.
 
