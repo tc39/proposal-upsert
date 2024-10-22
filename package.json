@@ -3,7 +3,7 @@
   "name": "proposal-upsert",
   "description": "ECMAScript Proposal, specs, and reference implementation for Map.prototype.upsert",
   "scripts": {
-    "build": "ecmarkup spec.emu index.html"
+    "build": "ecmarkup --load-biblio @tc39/ecma262-biblio --verbose spec.emu index.html --lint-spec"
   },
   "homepage": "https://github.com/tc39/template-for-proposals#readme",
   "repository": {
@@ -12,6 +12,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "ecmarkup": "^3.11.5"
+    "@tc39/ecma262-biblio": "^2.1.2771",
+    "ecmarkup": "^19.1.0"
   }
 }
