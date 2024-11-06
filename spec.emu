@@ -28,7 +28,7 @@ contributors: Jonas Haukenes, Daniel Minor
       1. If _p_.[[Key]] is not ~empty~ and SameValue(_p_.[[Key]], _key_) is *true*, return _p_.[[Value]].
     1. Let _p_ be the Record { [[Key]]: _key_, [[Value]]: _value_ }.
     1. Append _p_ to _M_.[[MapData]].
-    1. Return _p_.[[Value]].
+    1. Return _value_.
   </emu-alg>
 </emu-clause>
 
@@ -45,7 +45,7 @@ contributors: Jonas Haukenes, Daniel Minor
     1. Let _value_ be ? Call(_callbackfn_, _key_).
     1. Let _p_ be the Record { [[Key]]: _key_, [[Value]]: _value_ }.
     1. Append _p_ to _M_.[[MapData]].
-    1. Return _p_.[[Value]].
+    1. Return _value_.
   </emu-alg>
 </emu-clause>
 
@@ -60,7 +60,7 @@ contributors: Jonas Haukenes, Daniel Minor
       1. If _p_.[[Key]] is not ~empty~ and SameValue(_p_.[[Key]], _key_) is *true*, return _p_.[[Value]].
     1. Let _p_ be the Record { [[Key]]: _key_, [[Value]]: _value_ }.
     1. Append _p_ to _M_.[[WeakMapData]].
-    1. Return _p_.[[Value]].
+    1. Return _value_.
   </emu-alg>
 </emu-clause>
 
@@ -77,7 +77,7 @@ contributors: Jonas Haukenes, Daniel Minor
     1. Let _value_ be ? Call(_callbackfn_, _key_).
     1. Let _p_ be the Record { [[Key]]: _key_, [[Value]]: _value_ }.
     1. Append _p_ to _M_.[[MapData]].
-    1. Return _p_.[[Value]].
+    1. Return _value_.
   </emu-alg>
 </emu-clause>
 
