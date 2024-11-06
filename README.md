@@ -181,7 +181,7 @@ Map.prototype.getOrInsertComputed = function (key, callbackFunction) {
   if (this.has(key)) {
     return this.get(key);
   }
-  this.set(key, callbackFunction());
+  this.set(key, callbackFunction(key));
   return this.get(key);
 };
 ```
