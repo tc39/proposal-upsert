@@ -1,6 +1,7 @@
 # Proposal Upsert
 
-ECMAScript proposal and reference implementation for `Map.prototype.getOrInsert` and `Map.prototype.getOrInsertComputed`.
+ECMAScript proposal and reference implementation for `Map.prototype.getOrInsert`, `Map.prototype.getOrInsertComputed`,
+`WeakMap.prototype.getOrInsert`, and `WeakMap.prototype.getOrInsertComputed`.
 
 **Authors:** Daniel Minor (Mozilla) Lauritz Thoresen Angeltveit (Bergen) Jonas Haukenes (Bergen) Sune Lianes (Bergen) Vetle Larsen (Bergen) Mathias Hop Ness (Bergen)
 
@@ -14,17 +15,17 @@ ECMAScript proposal and reference implementation for `Map.prototype.getOrInsert`
 
 ## Motivation
 
-A common problem when using a `Map` is how to handle doing an update when
-you're not sure if the key already exists in the `Map`. This can be handled
+A common problem when using a `Map` or `WeakMap` is how to handle doing an update
+when you're not sure if the key already exists in the map. This can be handled
 by first checking if the key is present, and then inserting or updating
 depending upon the result, but this is both inconvenient for the developer,
-and less than optimal, because it requires multiple lookups in the `Map`
+and less than optimal, because it requires multiple lookups in the map
 that could otherwise be handled in a single call.
 
 ## Solution: `getOrInsert`
 
 We propose the addition of a method that will return the value associated
-with `key` if it is already present in the dictionary, and otherwise insert
+with `key` if it is already present in the `Map` or `WeakMap`, and otherwise insert
 the `key` with the provided default value, or the result of calling a provided
 callback function, and then return that value.
 
@@ -116,7 +117,7 @@ counts.set(key, m.getOrInsert(key, 0) + 1);
 For some usecases, determining the default value is potentially a costly operation that
 would be best avoided if it will not be used. In this case, we can use `getOrInsertComputed`.
 
-```
+```js
 // Using getOrInsertComputed
 let grouped = new Map();
 for (let [key, ...values] of data) {
