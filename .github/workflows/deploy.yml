@@ -17,7 +17,7 @@ jobs:
       with:
         node-version: 20
     - run: >
-        npm run build
+        npm ci --no-audit && npm run build
     - uses: JamesIves/github-pages-deploy-action@v4.5.0
       with:
         branch: gh-pages
