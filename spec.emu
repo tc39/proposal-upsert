@@ -13,7 +13,7 @@ contributors: Jonas Haukenes, Daniel Minor
   <h1>Introduction</h1>
   <p>Given a `key` and a value, the `getOrInsert` method will return the existing value if it exists, or otherwise
   insert the provided default value and return that value.</p>
-  <p>Similarly, given a `key` and a callback function, the `getOrInsert` method will return the existing value if it
+  <p>Similarly, given a `key` and a callback function, the `getOrInsertComputed` method will return the existing value if it
   exists, or otherwise insert the returned value of the callback function, and return that value.</p>
 </emu-intro>
 
