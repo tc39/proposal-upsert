@@ -7,6 +7,7 @@
 title: Map.prototype.getOrInsert
 stage: 2
 contributors: Jonas Haukenes, Daniel Minor
+markEffects: true
 </pre>
 
 <emu-intro id="intro">
