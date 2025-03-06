@@ -75,8 +75,8 @@ markEffects: true
   <emu-alg>
     1. Let _M_ be the *this* value.
     1. Perform ? RequireInternalSlot(_M_, [[WeakMapData]]).
-    1. If IsCallable(_callbackfn_) is *false*, throw a *TypeError* exception.
     1. If CanBeHeldWeakly(_key_) is *false*, throw a *TypeError* exception.
+    1. If IsCallable(_callbackfn_) is *false*, throw a *TypeError* exception.
     1. For each Record { [[Key]], [[Value]] } _p_ of _M_.[[WeakMapData]], do
       1. If _p_.[[Key]] is not ~empty~ and SameValue(_p_.[[Key]], _key_) is *true*, return _p_.[[Value]].
     1. Let _value_ be ? Call(_callbackfn_, *undefined*, « _key_ »).
