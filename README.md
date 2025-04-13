@@ -109,7 +109,7 @@ if (counts.has(key)) {
 
 // Using getOrInsert
 let counts = new Map();
-counts.set(key, m.getOrInsert(key, 0) + 1);
+counts.set(key, counts.getOrInsert(key, 0) + 1);
 ```
 
 ### Computing a default value
