@@ -143,6 +143,10 @@ at `key` but also returns a value if it exists at `key`
 * [`insert_or_assign`](https://en.cppreference.com/w/cpp/container/map/insert_or_assign) inserts if missing. updates existing value by replacing with a
 specific new one, not by applying a function to the existing value
 
+**C#**
+
+* [`GetOrAdd`](https://learn.microsoft.com/en-us/dotnet/api/system.collections.concurrent.concurrentdictionary-2.getoradd?view=net-9.0) Adds a key/value pair if the key does not already exist and returns the new value, or the existing value if the key already exists.
+
 **Rust**
 
 * [`and_modify`](https://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html#method.and_modify) Provides in-place mutable access to an occupied entry
