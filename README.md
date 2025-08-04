@@ -44,13 +44,13 @@ an existing value.
 
 ```js
 // Currently
-let prefs = new getUserPrefs();
+let prefs = getUserPrefsMap();
 if (!prefs.has("useDarkmode")) {
   prefs.set("useDarkmode", true); // default to true
 }
 
 // Using getOrInsert
-let prefs = new getUserPrefs();
+let prefs = getUserPrefsMap();
 prefs.getOrInsert("useDarkmode", true); // default to true
 ```
 
