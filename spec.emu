@@ -34,17 +34,17 @@ markEffects: true
 </emu-clause>
 
 <emu-clause id="sec-map.prototype.getOrInsertComputed">
-  <h1>Map.prototype.getOrInsertComputed ( _key_, _callbackfn_ )</h1>
+  <h1>Map.prototype.getOrInsertComputed ( _key_, _callback_ )</h1>
   <p>When the getOrInsertComputed method is called the following steps are taken:</p>
   <emu-alg>
     1. Let _M_ be the *this* value.
     1. Perform ? RequireInternalSlot(_M_, [[MapData]]).
-    1. If IsCallable(_callbackfn_) is *false*, throw a *TypeError* exception.
+    1. If IsCallable(_callback_) is *false*, throw a *TypeError* exception.
     1. Set _key_ to CanonicalizeKeyedCollectionKey(_key_).
     1. For each Record { [[Key]], [[Value]] } _p_ of _M_.[[MapData]], do
       1. If _p_.[[Key]] is not ~empty~ and SameValue(_p_.[[Key]], _key_) is *true*, return _p_.[[Value]].
-    1. Let _value_ be ? Call(_callbackfn_, *undefined*, « _key_ »).
-    1. NOTE: The Map may have been modified during execution of _callbackfn_.
+    1. Let _value_ be ? Call(_callback_, *undefined*, « _key_ »).
+    1. NOTE: The Map may have been modified during execution of _callback_.
     1. For each Record { [[Key]], [[Value]] } _p_ of _M_.[[MapData]], do
       1. If _p_.[[Key]] is not ~empty~ and SameValue(_p_.[[Key]], _key_) is *true*, then
         1. Set _p_.[[Value]] to _value_.
@@ -71,17 +71,17 @@ markEffects: true
 </emu-clause>
 
 <emu-clause id="sec-weakmap.prototype.getOrInsertComputed">
-  <h1>WeakMap.prototype.getOrInsertComputed ( _key_, _callbackfn_ )</h1>
+  <h1>WeakMap.prototype.getOrInsertComputed ( _key_, _callback_ )</h1>
   <p>When the getOrInsertComputed method is called the following steps are taken:</p>
   <emu-alg>
     1. Let _M_ be the *this* value.
     1. Perform ? RequireInternalSlot(_M_, [[WeakMapData]]).
     1. If CanBeHeldWeakly(_key_) is *false*, throw a *TypeError* exception.
-    1. If IsCallable(_callbackfn_) is *false*, throw a *TypeError* exception.
+    1. If IsCallable(_callback_) is *false*, throw a *TypeError* exception.
     1. For each Record { [[Key]], [[Value]] } _p_ of _M_.[[WeakMapData]], do
       1. If _p_.[[Key]] is not ~empty~ and SameValue(_p_.[[Key]], _key_) is *true*, return _p_.[[Value]].
-    1. Let _value_ be ? Call(_callbackfn_, *undefined*, « _key_ »).
-    1. NOTE: The WeakMap may have been modified during execution of _callbackfn_.
+    1. Let _value_ be ? Call(_callback_, *undefined*, « _key_ »).
+    1. NOTE: The WeakMap may have been modified during execution of _callback_.
     1. For each Record { [[Key]], [[Value]] } _p_ of _M_.[[WeakMapData]], do
       1. If _p_.[[Key]] is not ~empty~ and SameValue(_p_.[[Key]], _key_) is *true*, then
         1. Set _p_.[[Value]] to _value_.
