@@ -135,6 +135,10 @@ Similar functionality exists in other languages.
 * [`computeIfAbsent`](https://docs.oracle.com/javase/9/docs/api/java/util/Map.html#computeIfAbsent-K-java.util.function.Function-) insert if empty. computes
 the insertion value with a mapping function
 
+**Scala**
+
+* [`getOrElseUpdate`](https://scala-lang.org/api/3.7.3/scala/collection/mutable/MapOps.html#getOrElseUpdate-fffff230) inserts if missing.
+
 **C++**
 
 * [`emplace`](https://en.cppreference.com/w/cpp/container/map/emplace) inserts if missing
