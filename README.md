@@ -11,7 +11,7 @@ ECMAScript proposal and reference implementation for `Map.prototype.getOrInsert`
 
 **Former Champion:** Erica Pramer (GoDaddy)
 
-**Stage:** 3
+**Stage:** 4
 
 ## Motivation
 
